@@ -1,0 +1,26 @@
+{
+  "name": "movie",
+  "authors": [
+    "yi.wang<18842613507@163.com>"
+  ],
+  "description": "a movie manageSystem base express",
+  "main": "",
+  "keywords": [
+    "movie"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "bootstrap": "3.1.1"
+  }
+}
