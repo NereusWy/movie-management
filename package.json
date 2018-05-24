@@ -12,6 +12,7 @@
   "author": "yi.wang <18842613507@163.com>",
   "license": "ISC",
   "devDependencies": {
+    "bcrypt": "^2.0.1",
     "express": "^4.16.3",
     "grunt": "^1.0.2",
     "grunt-concurrent": "^2.3.1",
