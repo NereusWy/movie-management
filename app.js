@@ -3,6 +3,7 @@ var path = require('path')
 var mongoose = require('mongoose')
 var _ = require('underscore')
 var Movie = require('./models/movie')
+var User = require('./models/user')
 var bodyParser = require('body-parser')
 
 var port = process.env.PORT || 3000
@@ -135,6 +136,50 @@ app.delete('/admin/list',function(req,res) {
 	}
 })
 	
+app.get('/admin/userlist',function(req,res) {
+	User.fetch(function(err,users) {
+		if(err) {
+			console.log(err)
+		}
+		res.render('userlist', {
+			title:'movie 用户列表页',
+			users:users
+		})
+	})
+})
 
+/*
+	user/signup/:userid
+ 	req.params.userid
+	
+	user/signup/111?userid=1112
+	req.query.userid
+
+	post传参
+	req.body.userid
+
+	req.param('userid')全部都能取到。取值顺序先路径、再body、最后query
+*/
+app.post('/user/signup', function(req, res) {
+	var _user = req.body.user
+
+	User.find({name:_user.name}, function(err,user) {
+		if(err){
+			console.log(err)
+		}
+		if(user[0]){
+			return res.redirect('/')
+		}else {
+			var user = new User(_user)
+			user.save(function(err,user) {
+				if(err) {
+					console.log(err)
+				}
+
+				res.redirect('/admin/userlist')
+			})	
+		}
+	})
+})
 
 

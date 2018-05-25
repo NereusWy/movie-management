@@ -20,7 +20,7 @@ var UserSchema = new mongoose.Schema({
 	}
 })
 
-UserSchema.pre('save', function() {
+UserSchema.pre('save', function(next) {
 	var user = this
 	if(this.isNew) {
 		this.meta.createAt = this.meta.updateAt = Date.now()
