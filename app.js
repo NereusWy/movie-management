@@ -1,6 +1,7 @@
 var express = require('express')
 var path = require('path')
 var mongoose = require('mongoose')
+var mongooseStore = require('connect-mongo')(express)
 var _ = require('underscore')
 var Movie = require('./models/movie')
 var User = require('./models/user')
@@ -8,13 +9,22 @@ var bodyParser = require('body-parser')
 
 var port = process.env.PORT || 3000
 var app = express()
+var dbUrl = 'mongodb://localhost/movie'
 
-mongoose.connect('mongodb://localhost/movie')
+mongoose.connect(dbUrl)
 
 app.set('views','./views/pages')
 app.set('view engine', 'jade')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.cookieParser());
+app.use(express.session({
+	secret:'movie',
+	store:new mongooseStore({
+		url:dbUrl,
+		collecttion:'sessions'
+	})
+}));
 
 app.use(express.static(path.join(__dirname,'public')))
 app.locals.moment = require('moment')
@@ -23,6 +33,7 @@ app.listen(port)
 console.log('movie started on port ' + port)
 
 app.get('/',function(req,res) {
+	console.log(req.session.user)
 	Movie.fetch(function(err,movies) {
 		if(err) {
 			console.log(err)
@@ -179,6 +190,37 @@ app.post('/user/signup', function(req, res) {
 				res.redirect('/admin/userlist')
 			})	
 		}
+	})
+})
+
+app.post('/user/signin', function(req, res) {
+	var _user = req.body.user
+	var name = _user.name
+	var password = _user.password
+
+	User.findOne({name:name}, function(err,user) {
+		if(err) {
+			console.log(err)
+		}
+
+		if(!user) {
+			return redirerct('/')
+		}
+
+		user.comparePassword(password, function(err,isMatch) {
+			if(err) {
+				console.log(err)
+			}
+
+			if(isMatch) {
+				req.session.user = user
+
+				console.log('password is matched')
+				return res.redirerct('/')
+			}else{
+				console.log('password is not matched')
+			}
+		})
 	})
 })
 
