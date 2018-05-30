@@ -22,7 +22,7 @@ app.use(express.session({
 	secret:'movie',
 	store:new mongooseStore({
 		url:dbUrl,
-		collecttion:'sessions'
+		collection:'sessions'
 	})
 }));
 
@@ -34,6 +34,13 @@ console.log('movie started on port ' + port)
 
 app.get('/',function(req,res) {
 	console.log(req.session.user)
+
+	var _user = req.session.user 
+
+	if(_user){
+		app.locals.user = _user
+	}
+
 	Movie.fetch(function(err,movies) {
 		if(err) {
 			console.log(err)
@@ -216,12 +223,18 @@ app.post('/user/signin', function(req, res) {
 				req.session.user = user
 
 				console.log('password is matched')
-				return res.redirerct('/')
+				return res.redirect('/')
 			}else{
 				console.log('password is not matched')
 			}
 		})
 	})
+})
+
+app.get('/logout', function(req, res) {
+	delete req.session.user
+	delete app.locals.user
+	res.redirect('/')
 })
 
 
