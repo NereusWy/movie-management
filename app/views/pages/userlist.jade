@@ -17,9 +17,9 @@ block content
 							td #{item.name}
 							td #{moment(item.meta.createdAt).format('MM/DD/YYYY')}
 							td 
-								a(target="_blank", href="../movie/#{item._id}")查看
+								a查看
 							td 
-								a(target="_blank", href="../admin/update/#{item._id}")更新
+								a更新
 							td 
-								button.btn.btn-danger.del(type="button",data-id="#{item._id}")删除
+								button.btn.btn-danger.del删除
 
