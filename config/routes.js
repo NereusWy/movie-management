@@ -1,6 +1,7 @@
 var Index = require('../app/controllers/index')
 var User = require('../app/controllers/user')
 var Movie = require('../app/controllers/movie')
+var Comment = require('../app/controllers/comment')
 
 module.exports = function(app){
 	/*
@@ -42,4 +43,7 @@ module.exports = function(app){
 	app.post('/admin/movie/new',User.signinRequired, User.adminRequired,Movie.save)		//录入页面提交操作
 	app.get('/admin/list',User.signinRequired, User.adminRequired,Movie.list)			//电影列表页面
 	app.delete('/admin/list',User.signinRequired, User.adminRequired,Movie.del)			//电影删除页面
+
+	//Comment
+	app.post('/user/comment',User.signinRequired,Comment.save)
 }
