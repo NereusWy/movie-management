@@ -3,7 +3,6 @@ var Comment = require('../models/comment')
 exports.save = function(req,res) {
 	var _comment = req.body.comment
 	var movieId = _comment.movie
-	console.log(req.body.comment)
 	if(_comment.cid) {
 		Comment.findById(_comment.cid, function(err,comment) {
 			var reply = {
@@ -11,7 +10,7 @@ exports.save = function(req,res) {
 				to: _comment.tid,
 				content: _comment.content
 			}
-
+			console.log(comment)
 			comment.reply.push(reply)
 
 			comment.save(function(err, comment) {
