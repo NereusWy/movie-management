@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+	.container
+		.row
+			table.table.table-hover.table-bordered
+				thead
+					tr
+						th 名字
+						th 时间
+						th 查看
+						th 更新
+						th 删除
+				tbody
+					each item in categories
+						tr(class="item-id-#{item._id}")
+							td #{item.name}
+							td #{moment(item.meta.createdAt).format('MM/DD/YYYY')}
+							td 
+								a查看
+							td 
+								a更新
+							td 
+								button.btn.btn-danger.del删除
+

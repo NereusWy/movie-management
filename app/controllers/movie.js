@@ -1,4 +1,5 @@
 var Movie = require('../models/movie')
+var Category = require('../models/category')
 var Comment = require('../models/comment')
 var _ = require('underscore')
 
@@ -20,27 +21,24 @@ exports.detail = function(req,res) {
 	
 }
 exports.new = function(req,res) {
-	res.render('admin', {
+	Category.find({},function(err,categories) {
+		res.render('admin', {
 		title:'movie 后台录入页',
-		movie:{
-			doctor:'',
-			country:'',
-			title:'',
-			year:'',
-			poster:'',
-			language:'',
-			flash:'',
-			summary:''
-		}
+			movie:{},
+			categories:categories,
+		})
 	})
 }
 exports.update = function(req,res) {
 	var id =  req.params.id
 	if(id) {
 		Movie.findById(id,function(err,movie) {
-			res.render('admin',{
-				title:'movie 后台更新页',
-				movie:movie
+			Category.find({},function(err,categories) {
+				res.render('admin', {
+				title:'movie 后台录入页',
+					movie:movie,
+					categories:categories,
+				})
 			})
 		})
 	}
@@ -49,7 +47,7 @@ exports.update = function(req,res) {
 exports.save = function(req,res) {
 	var id = req.body.movie._id
 	var movieObj = req.body.movie
-	if(id !== 'undefined') {
+	if(id) {
 		Movie.findById(id,function(err,movie) {
 			if(err) {
 				console.log(err)
@@ -64,21 +62,22 @@ exports.save = function(req,res) {
 			})
 		})
 	}else{
-		_movie = new Movie({
-			'doctor':movieObj.doctor,
-			'country':movieObj.country,
-			'title':movieObj.title,
-			'year':movieObj.year,
-			'poster':movieObj.poster,
-			'language':movieObj.language,
-			'flash':movieObj.flash,
-			'summary':movieObj.summary
-		})
+		_movie = new Movie(movieObj)
+
+		var categortId = _movie.category
+
 		_movie.save(function(err,data) {
 			if(err) {
 				console.log(err)
 			}
-			res.redirect('/admin/list')
+			Category.findById(categortId,function(err,category) {
+
+				category.movies.push(data._id)
+
+				category.save(function(err,category) {
+					res.redirect('/admin/list')
+				})
+			})
 		})
 	}
 }
