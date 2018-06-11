@@ -19,7 +19,7 @@ exports.signup = function(req, res) {
 		if(err){
 			console.log(err)
 		}
-		console.log(user)
+
 		if(user[0]){
 			return res.redirect('/signin')
 		}else {
@@ -57,7 +57,6 @@ exports.signin = function(req, res) {
 			if(isMatch) {
 				req.session.user = user
 
-				console.log('password is matched')
 				return res.redirect('/')
 			}else{
 				return res.redirect('/signin')
@@ -68,7 +67,6 @@ exports.signin = function(req, res) {
 
 exports.logout = function(req, res) {
 	delete req.session.user
-	// delete app.locals.user
 	res.redirect('/')
 }
 

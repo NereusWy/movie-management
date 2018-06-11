@@ -7,6 +7,10 @@ block content
 				if movie._id
 					input(type="hidden",name="movie[_id]",value=movie._id)
 				.form-group
+					label.col-sm-2.control-label(for="movieSync") 豆瓣同步
+					.col-sm-10
+						input#movieSync.form-control(type="text")
+				.form-group
 					label.col-sm-2.control-label(for="inputCategory") 电影分类
 					.col-sm-10
 						input#inputCategory.form-control(type="text",name="movie[categoryName]",value=movie.categoryName)
@@ -55,3 +59,4 @@ block content
 				.form-group
 					.col-sm-offset-2.col-sm-10
 					button.btn.btn-default(type="submit") 录入
+	script(src="/js/admin.js")

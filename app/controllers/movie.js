@@ -64,20 +64,45 @@ exports.save = function(req,res) {
 	}else{
 		_movie = new Movie(movieObj)
 
-		var categortId = _movie.category
+		var categortId = movieObj.category
+		var categortName = movieObj.categoryName
+
+		console.log(categortId,categortName)
 
 		_movie.save(function(err,data) {
 			if(err) {
 				console.log(err)
 			}
-			Category.findById(categortId,function(err,category) {
 
-				category.movies.push(data._id)
+			if(categortId) {
+				console.log(111111111111111111111)
+				Category.findById(categortId,function(err,category) {
+
+					category.movies.push(data._id)
+
+					category.save(function(err,category) {
+						res.redirect('/admin/list')
+					})
+				})
+			} else if(categortName) {
+				console.log(2222222222222)
+				var category = new Category({
+					name:categortName,
+					movies:[data._id]
+				})
 
 				category.save(function(err,category) {
-					res.redirect('/admin/list')
+					data.category = category._id
+
+					data.save(function(err,movie) {
+						if(err) {
+							console.log(err)
+						}
+
+						res.redirect('/admin/list')
+					})
 				})
-			})
+			}
 		})
 	}
 }
