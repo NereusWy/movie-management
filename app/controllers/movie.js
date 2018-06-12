@@ -2,6 +2,8 @@ var Movie = require('../models/movie')
 var Category = require('../models/category')
 var Comment = require('../models/comment')
 var _ = require('underscore')
+var fs = require('fs')
+var path = require('path')
 
 exports.detail = function(req,res) {
 	var id = req.params.id
@@ -44,6 +46,29 @@ exports.update = function(req,res) {
 	}
 }
 
+//admin poster
+exports.savePoster = function(req,res,next) {
+	var posterData = req.files.uploadPoster
+	var filePath = posterData.path
+	var originalFileName = posterData.originalFileName
+
+	if(originalFileName) {
+		fs.readFile(filePath, function(err,data) {
+			var timestamp = Date.now()
+			var type = posterData.type.split('/')[1]
+			var poster = timestamp + '.' + type
+			var newPath = path.join(__dirname,'../../','/public/upload/' + poster)
+
+			fs.writeFile(newPath,data,function(err){
+				req.poster = poster
+				next()
+			})
+		})
+	}else{
+		next()
+	}
+}
+
 exports.save = function(req,res) {
 	var id = req.body.movie._id
 	var movieObj = req.body.movie
@@ -75,7 +100,6 @@ exports.save = function(req,res) {
 			}
 
 			if(categortId) {
-				console.log(111111111111111111111)
 				Category.findById(categortId,function(err,category) {
 
 					category.movies.push(data._id)
@@ -85,7 +109,6 @@ exports.save = function(req,res) {
 					})
 				})
 			} else if(categortName) {
-				console.log(2222222222222)
 				var category = new Category({
 					name:categortName,
 					movies:[data._id]

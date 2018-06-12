@@ -41,7 +41,7 @@ module.exports = function(app){
 	app.get('/movie/:id',Movie.detail)			//详情页面
 	app.get('/admin/movie',User.signinRequired, User.adminRequired,Movie.new)			//录入页面
 	app.get('/admin/update/:id',User.signinRequired, User.adminRequired,Movie.update)	//录入页面(带数据)更新
-	app.post('/admin/movie/new',User.signinRequired, User.adminRequired,Movie.save)		//录入页面提交操作
+	app.post('/admin/movie/new',User.signinRequired, User.adminRequired,Movie.savePoster,Movie.save)		//录入页面提交操作
 	app.get('/admin/list',User.signinRequired, User.adminRequired,Movie.list)			//电影列表页面
 	app.delete('/admin/list',User.signinRequired, User.adminRequired,Movie.del)			//电影删除页面
 
