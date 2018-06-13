@@ -50,15 +50,15 @@ exports.update = function(req,res) {
 exports.savePoster = function(req,res,next) {
 	var posterData = req.files.uploadPoster
 	var filePath = posterData.path
-	var originalFileName = posterData.originalFileName
-
-	if(originalFileName) {
+	var originalFilename = posterData.originalFilename
+	if(originalFilename) {
 		fs.readFile(filePath, function(err,data) {
 			var timestamp = Date.now()
 			var type = posterData.type.split('/')[1]
 			var poster = timestamp + '.' + type
 			var newPath = path.join(__dirname,'../../','/public/upload/' + poster)
 
+			console.log(newPath)
 			fs.writeFile(newPath,data,function(err){
 				req.poster = poster
 				next()
@@ -72,6 +72,10 @@ exports.savePoster = function(req,res,next) {
 exports.save = function(req,res) {
 	var id = req.body.movie._id
 	var movieObj = req.body.movie
+	if(req.poster) {
+		movieObj.poster = req.poster
+	}
+
 	if(id) {
 		Movie.findById(id,function(err,movie) {
 			if(err) {

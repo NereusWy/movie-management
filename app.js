@@ -15,6 +15,7 @@ app.set('view engine', 'jade')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.cookieParser());
+app.use(express.multipart());
 app.use(express.session({
 	secret:'movie',
 	store:new mongooseStore({
