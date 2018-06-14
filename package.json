@@ -18,10 +18,13 @@
     "grunt": "^1.0.2",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-mocha-test": "^0.13.3",
     "grunt-nodemon": "^0.4.2",
     "jade": "^1.11.0",
+    "mocha": "^5.2.0",
     "moment": "^2.22.1",
     "mongoose": "^5.1.2",
+    "should": "^13.2.1",
     "underscore": "^1.9.0"
   }
 }
