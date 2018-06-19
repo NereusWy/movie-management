@@ -12,10 +12,10 @@ var app = require('../../app.js')
 var mongoose = require('mongoose')
 var User = mongoose.model('User')
 
-var user
+var user 
 
 describe('<Unit Test',function() {
-	describe('Model User:' function() {
+	describe('Model User:', function() {
 		before(function(done) {
 			user = {
 				name: getRandomString(),
@@ -25,8 +25,11 @@ describe('<Unit Test',function() {
 			done()
 		})
 
-		describe('Before Method save:' function() {
+		describe('Before Method save:', function() {
 			it('should begin without test user', function(done) {
+				//mocha测试默认超过2000ms会超时。
+				this.timeout(5000);
+				
 				User.find({name:user.name}, function(err, users) {
 					users.should.have.length(0)
 
@@ -35,7 +38,7 @@ describe('<Unit Test',function() {
 			})
 		})
 
-		describe('User save:' function() {
+		describe('User save:', function() {
 			it('should save without problems', function(done) {
 				var _user = new User(user)
 
@@ -73,7 +76,6 @@ describe('<Unit Test',function() {
 				var _user = new User(user)
 
 				_user.save(function(err) {
-					should.not.exist(err)
 					_user.role.should.equal(0)
 
 					_user.remove(function(err) {
@@ -87,7 +89,7 @@ describe('<Unit Test',function() {
 				var _user1 = new User(user)
 				
 
-				_user.save(function(err) {
+				_user1.save(function(err) {
 					should.not.exist(err)
 
 					var _user2 = new User(user)
